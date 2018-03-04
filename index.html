@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Chat app</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="index.css" />
+    <script src="main.js"></script>
+</head>
+<body>
+    <h1 class ="title">Chat app</h1>
+    <div class="chatbox"></div>
+    <div class ="chatmessage">
+        <textarea class="chat" row= "1000" cols = "50"></textarea>
+        <button class="Sendbutton">Send</button>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.10.1/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+        apiKey: "AIzaSyCQDYJR_IUICGBJI4TX4g2oJcmcMsF9Ywk",
+        authDomain: "chat-apps-57f73.firebaseapp.com",
+        databaseURL: "https://chat-apps-57f73.firebaseio.com",
+        projectId: "chat-apps-57f73",
+        storageBucket: "chat-apps-57f73.appspot.com",
+        messagingSenderId: "151600392366"
+        };
+        firebase.initializeApp(config);
+    </script>
+    <script>
+        var isClicked = false
+        $(".Sendbutton").click(function(){
+          firebase.database().ref('users/' + new Date()).set(
+          {
+            chat: ($(".chat").val())
+          }
+        );
+       });
+      firebase.database().ref('users').on('value' , (snapshot) => {
+        if (isClicked) {
+          $(".chatbox").append("<b>Anonymous:");
+          $(".chatbox").append("<br>");
+          $(".chatbox").append(snapshot.val()[Object.keys(snapshot.val())[Object.keys(snapshot.val()).length - 1]].chat);
+          $(".chatbox").append("<br>");
+          $(".chatbox").append("<br>");
+        }
+        else {
+          isClicked = true
+        }
+      })
+    </script>
+</body>
+</html>
